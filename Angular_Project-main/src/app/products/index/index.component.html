@@ -1,0 +1,144 @@
+<br /><br />
+<div class="min-h-screen flex">
+  <aside class="w-1/6 bg-black p-4">
+    <app-sidebar></app-sidebar>
+  </aside>
+  <div class="w-5/6 p-4">
+    <br />
+    <h2 class="text-3xl font-semibold mb-4">List of products</h2>
+
+    <div class="mb-4 flex">
+      <div class="w-3/4 pr-2">
+        <input
+          type="text"
+          (keyup)="filter($event)"
+          placeholder="Search by name"
+          class="w-full px-4 py-2 border rounded"
+        />
+      </div>
+      <div class="w-1/4 pl-2">
+        <a
+          href="#"
+          routerLink="/products/create/"
+          class="bg-black hover:bg-gray-600 text-white py-2 px-4 rounded inline-flex items-center"
+        >
+          <i class="fas fa-plus mr-2"></i>
+          New Product
+        </a>
+      </div>
+    </div>
+
+    <div class="overflow-x-auto mt-4">
+      <div *ngIf="getDisplayedProducts().length === 0" class="text-center mt-4">
+        <p class="text-2xl font-semibold text-gray-600">
+          <i class="far fa-frown"></i> NO DATA FOUND
+        </p>
+      </div>
+
+      <table
+        *ngIf="getDisplayedProducts().length > 0"
+        class="w-full border-collapse"
+      >
+        <thead>
+          <tr>
+            <th class="p-4 text-center">#</th>
+
+            <th class="p-4 text-center">Image</th>
+            <th class="p-4 text-center">Name</th>
+            <th class="p-4 text-center">Quantity in stock</th>
+            <th class="p-4 text-center">Price</th>
+            <th class="p-4 text-center">Previous Price</th>
+            <th class="p-4 text-center">Category</th>
+            <th class="p-4 text-center">Date</th>
+            <th class="p-4 text-center">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr
+            *ngFor="let t of getDisplayedProducts()"
+            class="bg-white border-b"
+            [ngClass]="{ 'row-out-of-stock': t.stock === 0 }"
+          >
+            <td class="p-4 text-center">{{ t.index }}</td>
+
+            <td class="p-4 text-center">
+              <img src="{{ t.imageUrl }}" alt="" class="w-20 h-20" />
+            </td>
+            <td class="p-4 text-center">{{ t.name }}</td>
+
+            <td class="p-4 text-center">
+              {{ t.stock }}
+            </td>
+            <td class="p-4 text-center">{{ t.price }}</td>
+            <td class="p-4 text-center">
+              {{
+                t.prevPrice
+                  ? t.prevPrice + " TND"
+                  : "No previous price available"
+              }}
+            </td>
+            <td class="p-4 text-center">{{ t.category }}</td>
+            <td class="p-4 text-center">{{ t.relativeTime }}</td>
+            <td class="p-4 text-center">
+              <a
+                href="#"
+                [routerLink]="['/products/', t._id, 'view']"
+                class="btn btn-default"
+              >
+                <i class="fas fa-eye text-lg mr-2"></i>
+              </a>
+              <a
+                href="#"
+                [routerLink]="['/products/', t._id]"
+                class="btn btn-default"
+              >
+                <i class="fas fa-pencil-square text-blue-500 text-lg mr-2"></i>
+              </a>
+              <button
+                type="button"
+                (click)="deleteProduct(t._id)"
+                class="btn btn-default"
+              >
+                <i class="fas fa-trash text-red-500 text-lg mr-2"></i>
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="mt-4 flex justify-center">
+      <button
+        class="bg-black hover:bg-gray-600 text-white py-2 px-4 rounded mx-2"
+        [disabled]="currentPage === 1"
+        (click)="setPage(currentPage - 1)"
+      >
+        Previous
+      </button>
+      <button
+        class="bg-black hover:bg-gray-600 text-white py-2 px-4 rounded mx-2"
+        [disabled]="currentPage === getTotalPages()"
+        (click)="setPage(currentPage + 1)"
+      >
+        Next
+      </button>
+    </div>
+
+    <div class="mt-4 flex justify-center">
+      <button
+        *ngFor="let page of getPagesArray()"
+        class="bg-black hover:bg-gray-600 text-white py-2 px-4 rounded mx-2"
+        [class.bg-gray-700]="currentPage === page"
+        (click)="setPage(page)"
+      >
+        {{ page }}
+      </button>
+    </div>
+  </div>
+  <style>
+    .row-out-of-stock {
+      background-color: gray;
+      color: white;
+      opacity: 0.5;
+    }
+  </style>
+</div>

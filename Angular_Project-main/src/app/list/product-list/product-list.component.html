@@ -1,0 +1,259 @@
+<div class="min-h-screen flex bg-gray-100">
+  <aside class="w-1/6 bg-black p-4 text-white">
+    <div class="mt-20 relative text-gray-600">
+      <div class="space-y-4">
+        <div class="flex items-center mt-2">
+          <span class="text-white font-semibold text-sm mr-2">
+            {{ showOnlyWithPrevPrice ? "Discounted Products" : "All Products" }}
+          </span>
+          <div
+            class="w-10 h-6 rounded-full p-1 cursor-pointer bg-gray-500 hover:bg-gray-600 transition-transform duration-300"
+            [ngClass]="showOnlyWithPrevPrice ? 'bg-gray-500' : 'bg-gray-300'"
+            (click)="togglePrevPriceFilter()"
+          >
+            <div
+              class="bg-white w-4 h-4 rounded-full transform transition-transform duration-300"
+              [ngClass]="
+                showOnlyWithPrevPrice ? 'translate-x-full' : 'translate-x-0'
+              "
+            ></div>
+          </div>
+        </div>
+        <div class="flex items-center mt-2">
+          <span class="text-white font-semibold text-sm mr-2">
+            {{ stockFilter ? "In Stock" : "All Products" }}
+          </span>
+          <div
+            class="w-10 h-6 rounded-full p-1 cursor-pointer bg-gray-500 hover:bg-gray-600 transition-transform duration-300"
+            [ngClass]="stockFilter ? 'bg-gray-500' : 'bg-gray-300'"
+            (click)="toggleStockFilter()"
+          >
+            <div
+              class="bg-white w-4 h-4 rounded-full transform transition-transform duration-300"
+              [ngClass]="stockFilter ? 'translate-x-full' : 'translate-x-0'"
+            ></div>
+          </div>
+        </div>
+
+        <div class="flex items-center">
+          <span class="text-white font-semibold text-sm mr-2">Sort Price:</span>
+          <button
+            class="w-10 h-6 rounded-full p-1 cursor-pointer bg-gray-500 hover:bg-gray-600 transition-transform duration-300"
+            [class]="{ 'transform translate-x-full': !sortAscending }"
+            (click)="toggleSortOrder()"
+          >
+            <div
+              class="bg-white w-4 h-4 rounded-full transform transition-transform duration-300"
+              [class]="{ 'translate-x-full': !sortAscending }"
+            ></div>
+          </button>
+        </div>
+
+        <div class="flex items-center">
+          <span class="text-white font-semibold text-sm mr-2">Sort Name:</span>
+          <button
+            class="w-10 h-6 rounded-full p-1 cursor-pointer bg-gray-500 hover:bg-gray-600 transition-transform duration-300"
+            [class]="{ 'transform translate-x-full': !sortName }"
+            (click)="toggleSortName()"
+          >
+            <div
+              class="bg-white w-4 h-4 rounded-full transform transition-transform duration-300"
+              [class]="{ 'translate-x-full': !sortName }"
+            ></div>
+          </button>
+        </div>
+
+        <div class="flex items-center">
+          <span class="text-white font-semibold text-sm mr-2">Category:</span>
+          <select
+            [(ngModel)]="selectedCategory"
+            (change)="onCategorySelect()"
+            class="border-2 border-gray-400 text-gray-800 bg-white w-full h-10 px-3 rounded-lg focus:outline-none"
+          >
+            <option value="">All Categories</option>
+            <option
+              *ngFor="let category of categories"
+              [value]="category.name"
+              class="text-gray-800"
+            >
+              {{ category.name }}
+            </option>
+          </select>
+        </div>
+
+        <div class="flex items-center">
+          <span class="text-white font-semibold text-sm mr-2"
+            >Subcategory:</span
+          >
+          <select
+            [(ngModel)]="selectedSubcategory"
+            (change)="onSubcategorySelect()"
+            class="border-2 border-gray-400 text-gray-800 bg-white w-full h-10 px-3 rounded-lg focus:outline-none"
+          >
+            <option value="">All Subcategories</option>
+            <option
+              *ngFor="let subcategory of subcategories"
+              [value]="subcategory.name"
+              class="text-gray-800"
+            >
+              {{ subcategory.name }}
+            </option>
+          </select>
+        </div>
+
+        <div class="flex items-center mt-2">
+          <span class="text-white font-semibold text-sm mr-2">Min Price:</span>
+
+          <input
+            type="number"
+            placeholder="Min Price"
+            class="w-full h-10 p-2 text-gray-800 border-2 border-gray-400 rounded-lg focus:outline-none"
+            [(ngModel)]="minPrice"
+            (input)="onSearch()"
+          />
+        </div>
+
+        <div class="flex items-center mt-2">
+          <span class="text-white font-semibold text-sm mr-2">Max Price:</span>
+
+          <input
+            type="number"
+            placeholder="Max Price"
+            class="w-full h-10 p-2 text-gray-800 border-2 border-gray-400 rounded-lg focus:outline-none"
+            [(ngModel)]="maxPrice"
+            (input)="onSearch()"
+          />
+        </div>
+      </div>
+
+      <button
+        class="mt-4 bg-red-500 hover:bg-red-600 w-full text-white font-semibold py-2 px-4 rounded-full focus:outline-none"
+        (click)="resetFilters()"
+      >
+        Reset Filters
+      </button>
+    </div>
+  </aside>
+  <div class="w-5/6 p-4">
+    <div class="text-center mt-16 mb-7">
+      <input
+        type="text"
+        name="query"
+        placeholder="Search..."
+        class="bg-white w-full h-12 px-5 pr-10 shadow-lg rounded-full text-sm focus:outline-none"
+        [(ngModel)]="searchQuery"
+        (input)="onSearch()"
+      />
+
+      <div *ngIf="searchQuery" class="suggestions mt-2">
+        <ul class="grid grid-cols-3 gap-4">
+          <ng-container *ngIf="suggestions.length > 0; else noDataFound">
+            <li *ngFor="let suggestion of suggestions" class="mb-2">
+              <div class="flex items-center p-2 bg-white rounded-lg shadow-md">
+                <img
+                  [src]="suggestion.imageUrl"
+                  alt="{{ suggestion.name }}"
+                  class="w-16 h-16 object-cover rounded-l-lg"
+                />
+                <div class="p-2 flex-1">
+                  <p class="text-xl font-semibold text-gray-800">
+                    {{ suggestion.name }}
+                  </p>
+                  <p class="text-gray-600 text-lg font-semibold">
+                    {{ suggestion.price | currency : "USD" : true }}
+                  </p>
+                </div>
+                <button
+                  class="p-2 focus:outline-none hover:bg-gray-200 rounded-r-lg"
+                  style="font-size: 1.5rem; color: #ff5733"
+                >
+                  <a
+                    href="#"
+                    [routerLink]="['/list/', suggestion._id, 'product-detail']"
+                  >
+                    &gt;
+                  </a>
+                </button>
+              </div>
+            </li>
+          </ng-container>
+        </ul>
+        <ng-template #noDataFound>
+          <div class="bg-white p-4 shadow-md rounded-lg text-center">
+            <p class="text-gray-600 text-lg">No data found</p>
+          </div>
+        </ng-template>
+      </div>
+    </div>
+    <div
+      class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4"
+      *ngIf="!searchQuery"
+    >
+      <div
+        *ngFor="let product of getFilteredProducts()"
+        class="p-4 bg-white shadow-md rounded-lg"
+      >
+        <div class="relative">
+          <img
+            [src]="product.imageUrl"
+            alt="{{ product.name }}"
+            class="w-full h-48 object-cover object-center mb-2 rounded-t-lg"
+          />
+          <div
+            *ngIf="product.prevPrice"
+            class="absolute bottom-0 right-0 bg-red-600 text-white p-2 rounded-bl-lg"
+          >
+            <del>{{ product.prevPrice | currency : "USD" : true }}</del>
+          </div>
+          <div
+            *ngIf="product.prevPrice"
+            class="absolute top-0 left-0 bg-red-600 text-white p-2 rounded-tr-lg"
+          >
+            <span>-{{ calculateDiscountPercentage(product) }}%</span>
+          </div>
+        </div>
+        <div
+          *ngIf="isOutOfStock(product)"
+          class="bg-gray-400 text-white text-center p-2 rounded-bl-lg rounded-tr-lg"
+        >
+          Out of Stock
+        </div>
+        <div
+          *ngIf="!isOutOfStock(product)"
+          class="bg-green-600 text-white p-2 text-center rounded-bl-lg rounded-tr-lg"
+        >
+          In Stock
+        </div>
+
+        <h2 class="text-xl font-semibold text-gray-800 mb-2">
+          {{ product.name }}
+        </h2>
+        <p class="text-gray-600 text-lg font-semibold mb-2">
+          {{ product.price | currency : "USD" : true }}
+        </p>
+        <button
+          class="bg-black hover:bg-gray-600 w-full text-white font-semibold py-2 px-4 rounded-full focus:outline-none"
+        >
+          <a href="#" [routerLink]="['/list/', product._id, 'product-detail']">
+            View Product
+          </a>
+        </button>
+      </div>
+    </div>
+    <div class="text-center mt-16" *ngIf="getFilteredProducts().length === 0">
+      <div class="bg-white p-4 shadow-md rounded-lg text-center">
+        <p class="text-gray-600 text-lg mt-4">
+          <i class="far fa-frown"></i> No products found
+        </p>
+      </div>
+    </div>
+    <div class="text-center mt-20" *ngIf="!noMoreItemsToLoad">
+      <button
+        class="bg-black text-white w-64 font-semibold py-2 px-4 rounded-full focus:outline-none"
+        (click)="loadMoreItems()"
+      >
+        Load More
+      </button>
+    </div>
+  </div>
+</div>

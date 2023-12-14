@@ -1,0 +1,150 @@
+<br /><br />
+
+<div class="min-h-screen flex">
+  <aside class="w-1/6 bg-black p-4">
+    <app-sidebar></app-sidebar>
+  </aside>
+  <div class="w-5/6 p-4">
+    <br /><br /><br /><br /><br /><br /><br /><br />
+    <div class="flex items-center justify-center h-screen">
+      <div class="bg-white rounded-lg shadow-2xl p-8 transform -rotate-3">
+        <div
+          class="flex items-center justify-center ml-6 -mt-28 bg-white shadow-xl rounded-full h-36 w-36 mb-4 border-2 border-black"
+        >
+          <img
+            src="{{ productData.imageUrl }}"
+            alt="{{ productData.name }}"
+            class="rounded-full"
+          />
+        </div>
+        <form
+          (ngSubmit)="editProduct()"
+          class="max-w-md mx-auto"
+          #productForm="ngForm"
+        >
+          <div class="mb-4">
+            <label for="name" class="block text-gray-600">Product Name:</label>
+            <input
+              type="text"
+              id="name"
+              name="name"
+              [(ngModel)]="productData.name"
+              class="w-full p-2 border rounded"
+              required
+            />
+          </div>
+          <div class="mb-4">
+            <label for="description" class="block text-gray-600"
+              >Description:</label
+            >
+            <textarea
+              id="description"
+              name="description"
+              [(ngModel)]="productData.description"
+              class="w-full p-2 border rounded"
+              required
+            ></textarea>
+          </div>
+          <div class="mb-4">
+            <label for="price" class="block text-gray-600">Price:</label>
+            <input
+              type="number"
+              id="price"
+              name="price"
+              [(ngModel)]="productData.price"
+              class="w-full p-2 border rounded"
+              required
+            />
+          </div>
+          <div class="mb-4">
+            <label for="prevPrice" class="block text-gray-600"
+              >Previous Price:</label
+            >
+            <input
+              type="number"
+              id="prevPrice"
+              name="prevPrice"
+              [(ngModel)]="productData.prevPrice"
+              class="w-full p-2 border rounded"
+            />
+          </div>
+          <div class="mb-4">
+            <label for="stock" class="block text-gray-600">Stock:</label>
+            <input
+              type="number"
+              id="stock"
+              name="stock"
+              [(ngModel)]="productData.stock"
+              class="w-full p-2 border rounded"
+            />
+          </div>
+
+          <div class="mb-4">
+            <label for="category" class="block text-gray-600">Category:</label>
+            <select
+              id="category"
+              name="category"
+              [(ngModel)]="productData.category"
+              required
+              (change)="onCategoryChange()"
+              class="w-full p-2 border rounded"
+            >
+              <option value="" disabled>Select a category</option>
+              <option
+                *ngFor="let category of categories"
+                [value]="category.name"
+              >
+                {{ category.name }}
+              </option>
+            </select>
+          </div>
+          <div class="mb-4">
+            <label for="subCategory" class="block text-gray-600"
+              >Sub-Category:</label
+            >
+            <select
+              id="subCategory"
+              name="sub_category"
+              [(ngModel)]="productData.subCategory"
+              required
+              class="w-full p-2 border rounded"
+            >
+              <option value="" disabled>Select a sub-category</option>
+              <option
+                *ngFor="let subcategory of subcategories"
+                [value]="subcategory.name"
+              >
+                {{ subcategory.name }}
+              </option>
+            </select>
+          </div>
+
+          <div class="mb-4">
+            <label for="imageUrl" class="block text-gray-600">Image URL:</label>
+            <!-- <input
+          type="text"
+          id="imageUrl"
+          name="imageUrl"
+          [(ngModel)]="productData.imageUrl"
+          class="w-full p-2 border rounded"
+          required
+        /> -->
+            <div>
+              <file-pond #myPond [options]="pondOptions" [files]="pondFiles">
+              </file-pond>
+            </div>
+          </div>
+          <div class="mt-4">
+            <button
+              type="submit"
+              class="bg-black w-full text-white py-2 px-4 rounded"
+              [disabled]="productForm.invalid"
+            >
+              Update Product
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

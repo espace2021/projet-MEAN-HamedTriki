@@ -1,0 +1,95 @@
+<header class="bg-gray-800 text-white text-center py-20">
+  <div class="container mx-auto">
+    <h1 class="text-4xl font-extrabold mb-4">Welcome to Echri</h1>
+    <p class="text-lg">
+      Discover a world of quality products for every need and occasion.
+    </p>
+    <a
+      href="#"
+      [routerLink]="['/list/product-list']"
+      class="mt-6 inline-block bg-black text-white py-2 px-4 rounded-full hover:bg-gray-600"
+      >Shop Now</a
+    >
+  </div>
+</header>
+
+<section class="container mx-auto my-10">
+  <h2 class="text-3xl font-semibold mb-6">Our Category</h2>
+  <div class="flex justify-around">
+    <div class="bg-white p-6 rounded-lg shadow-md text-center">
+      <img
+        src="../../../assets/book.jpg"
+        alt="Category 1"
+        class="mb-4 rounded-md"
+      />
+      <h3 class="text-lg font-semibold">Books</h3>
+    </div>
+    <div class="bg-white p-6 rounded-lg shadow-md text-center">
+      <img
+        src="../../../assets/fashion.jpg"
+        alt="Category 2"
+        class="mb-4 rounded-md"
+      />
+      <h3 class="text-lg font-semibold">Fashion</h3>
+    </div>
+    <div class="bg-white p-6 rounded-lg shadow-md text-center">
+      <img
+        src="../../../assets/sport.jpg"
+        alt="Category 3"
+        class="mb-4 rounded-md"
+      />
+      <h3 class="text-lg font-semibold">Sports</h3>
+    </div>
+  </div>
+</section>
+
+<section class="container mx-auto my-10">
+  <h2 class="text-3xl font-semibold mb-6">Featured Products</h2>
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+    <div
+      *ngFor="let toy of featuredToys"
+      class="bg-white p-6 rounded-lg shadow-md"
+    >
+      <img
+        [src]="toy.imageUrl"
+        alt="{{ toy.name }}"
+        class="mb-4 h-52 w-36 text-center rounded-md"
+      />
+      <h3 class="text-lg font-semibold">{{ toy.name }}</h3>
+      <p class="text-gray-600">{{ truncateText(toy.description, 10) }}</p>
+      <div class="mt-4">
+        <span class="text-blue-500 font-semibold">{{ toy.price }}</span>
+        <button
+          class="bg-black hover:bg-gray-600 focus:outline-none text-white px-3 py-1 rounded-full float-right"
+        >
+          <a href="#" [routerLink]="['/list/', toy._id, 'product-detail']">
+            View Product
+          </a>
+        </button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="bg-gray-800 text-white py-10">
+  <div class="container mx-auto text-center">
+    <h2 class="text-3xl font-semibold mb-4">Subscribe to Our Newsletter</h2>
+    <p class="text-lg mb-6">
+      Stay updated with the latest toys and promotions. Subscribe now!
+    </p>
+    <form action="#" method="POST" class="flex justify-center">
+      <input
+        type="email"
+        name="email"
+        placeholder="Enter your email"
+        class="px-4 py-2 mr-2 rounded-md focus:outline-none focus:ring focus:border-blue-300"
+      />
+      <button
+        type="submit"
+        class="bg-black text-white px-6 py-2 rounded-full hover:bg-gray-600"
+      >
+        Subscribe
+      </button>
+    </form>
+  </div>
+</section>

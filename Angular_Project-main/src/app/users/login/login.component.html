@@ -1,0 +1,50 @@
+<div class="flex items-center justify-center h-screen">
+  <div
+    class="bg-white dark:bg-slate-500 rounded-lg shadow-lg p-8 transform -rotate-3"
+  >
+    <h1 class="text-3xl font-bold mb-4 text-center text-gray-800">Login</h1>
+    <p class="text-red-500 mb-4" *ngIf="error">{{ error }}</p>
+    <form [formGroup]="loginForm" (ngSubmit)="handleLogin()">
+      <div class="mb-4">
+        <label class="block mb-1 text-gray-800 dark:text-white">Email:</label>
+        <input
+          type="email"
+          formControlName="email"
+          class="border border-gray-300 p-2 w-full rounded"
+        />
+      </div>
+      <div class="mb-4">
+        <label class="block mb-1 dark:text-white text-gray-800"
+          >Password:</label
+        >
+        <input
+          type="password"
+          formControlName="password"
+          class="border border-gray-300 p-2 w-full rounded"
+        />
+      </div>
+      <div class="mb-4">
+        <label class="flex items-center text-gray-800">
+          <input
+            type="checkbox"
+            formControlName="rememberMe"
+            class="mr-2 border"
+          />
+          <span class="dark:text-white">Remember Me</span>
+        </label>
+      </div>
+      <div className="mb-4">
+        <label className="flex items-center text-gray-800 dark:text-white">
+          <a href="/validate-email">Forgot Your password?</a>
+        </label>
+      </div>
+      <br />
+      <button
+        type="submit"
+        class="font-bold px-4 py-2 w-full text-sm rounded-lg text-white bg-black opacity-80 hover:opacity-100"
+      >
+        Login
+      </button>
+    </form>
+  </div>
+</div>

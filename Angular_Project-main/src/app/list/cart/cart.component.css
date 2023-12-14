@@ -1,0 +1,33 @@
+/* custom-dialog-styles.css */
+.red-button {
+  background-color: red;
+  color: white;
+}
+
+.green-button {
+  background-color: green;
+  color: white;
+}
+
+/* CSS Styles for Custom Radio Buttons */
+.radio-container {
+  display: flex;
+  align-items: center;
+  margin: 10px 0;
+}
+
+.radio-icon {
+  font-size: 1.2rem; /* Adjust the size as needed */
+  margin-right: 10px; /* Adjust the spacing between the icon and label */
+  color: #3498db; /* Default icon color */
+  cursor: pointer;
+}
+
+.radio-icon.checked {
+  color: #27ae60; /* Icon color for checked state */
+}
+
+/* Optional: Add a hover effect */
+.radio-icon:hover {
+  color: #e74c3c; /* Change color on hover */
+}

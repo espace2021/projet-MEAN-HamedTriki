@@ -1,0 +1,153 @@
+<br /><br />
+<div class="bg-gray-100 py-6 px-4">
+  <div class="max-w-3xl mx-auto bg-white p-6 rounded-lg shadow-lg">
+    <h1 class="text-3xl font-bold text-gray-800 mb-4">My Orders</h1>
+    <ul class="mt-6 space-y-4">
+      <li
+        *ngFor="let order of orders; let i = index"
+        class="relative p-6 rounded-lg shadow-md transition-transform transform hover:-translate-y-1"
+        [ngClass]="{
+          'bg-orange-200': order.paymentStatus === 'Pending',
+          'bg-red-200': order.paymentStatus === 'Canceled',
+          'bg-green-200': order.paymentStatus === 'Accepted'
+        }"
+      >
+        <div class="flex justify-between">
+          <p class="text-lg font-semibold text-gray-800">
+            Order Date: {{ order.orderDate | date }}
+          </p>
+          <p class="text-gray-600 dark:text-gray-400">
+            Total Amount: {{ order.totalAmount | currency }}
+          </p>
+        </div>
+        <div
+          *ngIf="order.paymentStatus === 'Pending'"
+          class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
+        >
+          <div
+            class="w-6 h-6 border-t-2 border-black border-solid rounded-full animate-spin"
+          ></div>
+        </div>
+
+        <button
+          *ngIf="order.paymentStatus === 'Pending'"
+          class="absolute bottom-1 right-10 text-red-900 font-semibold rounded flex items-center"
+          (click)="cancelOrder(i)"
+        >
+          <i class="fas fa-trash-alt mr-2"></i>
+        </button>
+
+        <button
+          class="absolute bottom-1 right-2 text-blue-900 font-semibold rounded flex items-center"
+          (click)="openOrderDetailsModal(order)"
+        >
+          <i class="fas fa-eye mr-2"></i>
+        </button>
+      </li>
+    </ul>
+  </div>
+</div>
+
+<ng-template #orderDetailsModal let-data="data">
+  <div class="fixed inset-0 flex items-center justify-center z-50">
+    <div class="modal-overlay bg-gray-800 opacity-50 fixed inset-0"></div>
+    <div
+      class="modal-content bg-white p-6 rounded-lg shadow-lg max-w-md absolute"
+    >
+      <div id="htmlData" style="max-height: 80vh; overflow-y: auto">
+        <div class="text-center">
+          <h1 class="text-4xl font-extrabold text-gray-800 mb-2">
+            Order Details
+          </h1>
+        </div>
+        <div class="mb-4">
+          <p class="font-semibold">Customer Name:</p>
+          <p class="text-gray-700">
+            {{ selectedOrder?.shippingAddress?.userName }}
+          </p>
+        </div>
+        <div class="mb-4">
+          <p class="font-semibold">Order Date:</p>
+          <p class="text-gray-700">{{ selectedOrder?.orderDate | date }}</p>
+        </div>
+        <div class="mt-4">
+          <h2 class="text-xl font-semibold mb-2">Order Items:</h2>
+          <table class="w-full border-collapse border border-gray-300">
+            <thead>
+              <tr>
+                <th class="py-2 px-4 bg-gray-200 border border-gray-300">
+                  Product
+                </th>
+                <th class="py-2 px-4 bg-gray-200 border border-gray-300">
+                  Quantity
+                </th>
+                <th class="py-2 px-4 bg-gray-200 border border-gray-300">
+                  Price
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let item of selectedOrder?.items">
+                <td class="py-2 px-4 border border-gray-300">
+                  {{ item.productName }}
+                </td>
+                <td class="py-2 px-4 border border-gray-300">
+                  {{ item.quantity }}
+                </td>
+                <td class="py-2 px-4 border border-gray-300">
+                  {{ item.price | currency }}
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="mb-4">
+          <p class="font-semibold">Total Amount:</p>
+          <p class="text-gray-700">
+            {{ selectedOrder?.totalAmount | currency }}
+          </p>
+        </div>
+        <div class="mb-4">
+          <p class="font-semibold">Shipping Address:</p>
+          <p class="text-gray-700">
+            {{ selectedOrder?.shippingAddress?.address }},
+            {{ selectedOrder?.shippingAddress?.city }},
+            {{ selectedOrder?.shippingAddress?.country }}
+          </p>
+        </div>
+        <div class="mb-4">
+          <p class="font-semibold">Payment Method:</p>
+          <p class="text-gray-700">{{ selectedOrder?.paymentMethod }}</p>
+        </div>
+        <div class="mb-4">
+          <p class="font-semibold">Payment Status:</p>
+          <p
+            class="text-sm
+            {{
+              selectedOrder?.paymentStatus === 'Accepted'
+                ? 'text-green-500'
+                : selectedOrder?.paymentStatus === 'Canceled'
+                ? 'text-red-500'
+                : 'text-orange-500'
+            }}"
+          >
+            {{ selectedOrder?.paymentStatus }}
+          </p>
+        </div>
+      </div>
+
+      <button
+        (click)="closeModal()"
+        class="px-4 py-2 text-white bg-red-500 hover:bg-red-600 font-semibold rounded-full flex items-center"
+      >
+        <i class="fas fa-times mr-2"></i> Close
+      </button>
+    </div>
+  </div>
+</ng-template>
+
+<ng-container
+  *ngIf="selectedOrder; then orderDetailsModal; else noOrderSelected"
+>
+</ng-container>
+<ng-template #noOrderSelected> </ng-template>

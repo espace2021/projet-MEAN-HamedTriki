@@ -1,0 +1,77 @@
+<br /><br />
+<div class="min-h-screen flex">
+  <aside class="w-1/6 bg-black p-4">
+    <app-sidebar></app-sidebar>
+  </aside>
+  <div class="w-5/6 p-4">
+    <br /><br />
+    <div class="flex items-center justify-center h-screen">
+      <div class="bg-white rounded-lg shadow-2xl p-8 transform -rotate-3">
+        <div
+          class="flex items-center justify-center ml-6 -mt-28 bg-white shadow-xl rounded-full h-36 w-36 mb-4 border-2 border-black"
+        >
+          <img
+            src="{{ productData.imageUrl }}"
+            alt="{{ productData.name }}"
+            class="rounded-full"
+          />
+        </div>
+        <div class="max-w-md mx-auto">
+          <div class="mb-4">
+            <label for="name" class="block text-gray-600 font-semibold"
+              >Product Name:</label
+            >
+            <div class="p-2 border rounded bg-gray-100">
+              {{ productData.name }}
+            </div>
+          </div>
+          <div class="mb-4">
+            <label for="description" class="block text-gray-600 font-semibold"
+              >Description:</label
+            >
+            <div class="p-2 border rounded bg-gray-100">
+              {{ productData.description }}
+            </div>
+          </div>
+          <div class="mb-4">
+            <label for="price" class="block text-gray-600 font-semibold"
+              >Price:</label
+            >
+            <div class="p-2 border rounded bg-gray-100">
+              {{ productData.price }}
+            </div>
+          </div>
+          <div class="mb-4">
+            <label for="prevPrice" class="block text-gray-600 font-semibold"
+              >Previous Price:</label
+            >
+            <div class="p-2 border rounded bg-gray-100">
+              {{
+                productData.prevPrice
+                  ? productData.prevPrice + " TND"
+                  : "No previous price available"
+              }}
+            </div>
+          </div>
+          <div class="mb-4">
+            <label for="category" class="block text-gray-600 font-semibold"
+              >Category:</label
+            >
+            <div class="p-2 border rounded bg-gray-100">
+              {{ productData.category }}
+            </div>
+          </div>
+          <div class="mt-4">
+            <button
+              type="submit"
+              class="bg-gray-800 text-white py-2 px-4 rounded w-full"
+              (click)="returnTo()"
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

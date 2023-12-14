@@ -1,0 +1,49 @@
+<div class="flex">
+  <nav
+    [class.shadow-lg]="isScrolled"
+    class="bg-black p-4 flex justify-between items-center text-white fixed top-0 w-full z-50 transition-shadow duration-300 ease-in-out"
+  >
+    <div class="flex items-center">
+      <a href="#" [routerLink]="['/']">
+        <img
+          src="https://res.cloudinary.com/dhzlfojtv/image/upload/v1688387758/uploads/hciy8ysegdcl0xxv1igj.png"
+          alt="Logo"
+          class="h-8 w-8 mr-2 bg-white rounded-xl"
+        />
+      </a>
+      <span class="text-2xl font-semibold">Echri</span>
+    </div>
+
+    <ul class="flex space-x-4">
+      <li><a href="#" [routerLink]="['/']">Home</a></li>
+      <li><a href="#" [routerLink]="['/list/product-list']">Products</a></li>
+      <li><a href="#" [routerLink]="['/about']">About</a></li>
+    </ul>
+
+    <div class="flex space-x-4">
+      <div class="relative" (click)="toggleDropdown()">
+        <a><i class="fas fa-user hover:cursor-pointer"></i></a>
+        <div class="dropdown" *ngIf="showDropdown">
+          <div *ngIf="!isConnected">
+            <a (click)="login()">Login</a>
+            <a (click)="register()">Register</a>
+          </div>
+          <div *ngIf="isConnected">
+            <a (click)="redirectToUserProfile()">Profile</a>
+            <a (click)="redirectToUserOrders()">My Orders</a>
+            <a (click)="handleLogout()">Logout</a>
+          </div>
+        </div>
+      </div>
+      <a *ngIf="isConnected" href="#" [routerLink]="['/list/', userID, 'cart']">
+        <i class="fas fa-shopping-cart"></i>
+        <span
+          *ngIf="cartItemCount >= 0"
+          class="bg-red-500 text-white rounded-full w-4 h-4 flex items-center justify-center absolute top-5 right-4 -mt-2 -mr-2"
+        >
+          {{ cartItemCount }}
+        </span>
+      </a>
+    </div>
+  </nav>
+</div>

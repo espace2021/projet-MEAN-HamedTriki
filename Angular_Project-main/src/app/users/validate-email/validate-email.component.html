@@ -1,0 +1,23 @@
+<div class="flex items-center justify-center h-screen">
+  <div
+    class="bg-white dark:bg-slate-500 rounded-lg shadow-lg p-8 transform -rotate-3"
+  >
+    <h1 class="text-3xl font-bold mb-4 text-center">Validate Email</h1>
+
+    <div class="mb-4">
+      <label class="block mb-1 text-gray-800 dark:text-white">Email:</label>
+      <input
+        class="border border-gray-300 p-2 w-full rounded focus:outline-none focus:border-black"
+        type="email"
+        [(ngModel)]="email"
+      />
+    </div>
+
+    <button
+      (click)="handleValidateEmail()"
+      class="font-bold px-4 py-2 text-sm rounded-lg text-white bg-black opacity-80 hover:opacity-100"
+    >
+      Validate
+    </button>
+  </div>
+</div>

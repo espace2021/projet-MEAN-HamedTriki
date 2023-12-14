@@ -1,0 +1,102 @@
+<br /><br /><br />
+<ng-container *ngIf="cartItems.length === 0; else cartNotEmpty">
+  <div class="text-gray-600 text-lg text-center py-8">
+    <i class="fas fa-shopping-cart text-4xl text-gray-400 mb-4"></i>
+    <p>Your shopping cart is empty.</p>
+  </div>
+</ng-container>
+<ng-template #cartNotEmpty>
+  <div class="container mx-auto mt-8">
+    <h1 class="text-3xl font-bold text-gray-800 mb-4">Shopping Cart</h1>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+      <div
+        *ngFor="let item of cartItems"
+        class="bg-white shadow-lg rounded-lg p-4"
+      >
+        <div class="flex items-center">
+          <img
+            [src]="item.productImage"
+            alt="Product Image"
+            class="w-24 h-24 object-cover rounded-lg"
+          />
+          <div class="ml-4">
+            <h2 class="text-lg font-semibold text-gray-800">
+              {{ item.productName }}
+            </h2>
+            <p class="text-sm text-gray-600">
+              {{ item.price | currency : "USD" : true }}
+            </p>
+            <div class="flex items-center mt-2">
+              <input
+                [(ngModel)]="item.quantity"
+                class="w-16 h-10 border border-gray-300 rounded-lg px-2 py-1 focus:outline-none"
+              />
+              <div class="flex ml-44">
+                <button
+                  class="text-red-600 hover:text-red-700"
+                  (click)="removeItem(item._id)"
+                >
+                  <i class="fas fa-trash-alt"></i>
+                </button>
+                <button
+                  class="text-green-600 hover:text-green-700 ml-2"
+                  (click)="updateQuantity(item._id, item.quantity)"
+                >
+                  <i class="fas fa-pencil-alt"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="mt-4 flex justify-between items-center">
+      <div>
+        <p class="text-lg font-semibold text-gray-800">
+          <i class="fas fa-shopping-cart text-red-600"></i> Total Cost:
+          <span class="text-blue-500">{{
+            calculateTotalCost() | currency : "USD" : true
+          }}</span>
+        </p>
+      </div>
+      <div class="flex items-center space-x-4">
+        <div>
+          <label for="cash" class="text-gray-800">Cash</label>
+          <input
+            type="radio"
+            [(ngModel)]="paymentMethod"
+            value="cash"
+            id="cash"
+            class="ml-2"
+          />
+        </div>
+        <div>
+          <label for="stripe" class="text-gray-800">Stripe</label>
+          <input
+            type="radio"
+            [(ngModel)]="paymentMethod"
+            value="stripe"
+            id="stripe"
+            class="ml-2"
+          />
+        </div>
+        <button
+          *ngIf="paymentMethod === 'cash'"
+          (click)="checkout()"
+          class="bg-gray-500 text-white px-4 py-2 rounded-lg hover:bg-gray-700"
+        >
+          <i class="fas fa-check"></i> Cash Checkout
+        </button>
+        <div *ngIf="paymentMethod === 'stripe'">
+          <button
+            (click)="checkoutProduct()"
+            class="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-700"
+          >
+            <i class="fas fa-check"></i> Stripe Checkout
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>
+<br /><br />

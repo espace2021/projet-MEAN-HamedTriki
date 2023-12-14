@@ -1,0 +1,101 @@
+<br /><br />
+<div class="min-h-screen flex">
+  <aside class="w-1/6 bg-black p-4">
+    <app-sidebar></app-sidebar>
+  </aside>
+  <div class="w-5/6 p-4">
+    <br />
+    <div class="container mx-auto p-8">
+      <h1 class="text-4xl font-bold mb-8">User Management</h1>
+
+      <div class="mb-4 flex">
+        <input
+          type="text"
+          placeholder="Search users..."
+          class="border p-2 w-3/4 mr-2"
+          (keyup)="filter($event)"
+        />
+        <button
+          (click)="deleteSelectedUsers()"
+          [disabled]="selectedUsers.length === 0"
+          class="px-4 py-2 rounded-md w-1/4
+          {{
+            selectedUsers.length === 0
+              ? 'bg-gray-500 text-gray-300 cursor-not-allowed'
+              : 'bg-red-500 text-white hover:bg-red-700'
+          }}"
+        >
+          Delete Selected Users
+        </button>
+      </div>
+
+      <div class="overflow-x-auto">
+        <table class="w-full border-collapse border">
+          <thead>
+            <tr>
+              <th class="border p-2 text-center">
+                <input type="checkbox" (change)="toggleAllCheckboxes($event)" />
+              </th>
+              <th class="border p-2 text-center">Username</th>
+              <th class="border p-2 text-center">Email</th>
+              <th class="border p-2 text-center">Status</th>
+              <th class="border p-2 text-center">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let user of users" class="bg-white border-b">
+              <td class="border p-2 text-center">
+                <input
+                  type="checkbox"
+                  [checked]="selectedUsers.includes(user._id)"
+                  (change)="handleCheckboxChange(user._id)"
+                  *ngIf="loggedInUserId !== user._id"
+                />
+              </td>
+              <td class="border p-2 text-center">{{ user.name }}</td>
+              <td class="border p-2 text-center">{{ user.email }}</td>
+              <td class="border p-2 text-center">
+                {{ user.verified ? "Verified" : "Not Verified" }}
+              </td>
+              <td class="border p-2 flex items-center justify-center space-x-2">
+                <button
+                  *ngIf="loggedInUserId !== user._id"
+                  (click)="deleteUser(user._id)"
+                  class="text-red-500 hover:text-red-700 p-2 rounded-full bg-white border border-red-500 transition-all duration-300 flex items-center focus:outline-none"
+                  title="Delete User"
+                >
+                  <i class="fas fa-trash-alt"></i>
+                </button>
+                <button
+                  *ngIf="loggedInUserId !== user._id"
+                  (click)="toggleUserStatus(user._id, user.status)"
+                  class="text-blue-500 hover:text-blue-700 p-2 rounded-full bg-white border border-blue-500 transition-all duration-300 flex items-center focus:outline-none"
+                  title="{{
+                    user.status ? 'Deactivate User' : 'Activate User'
+                  }}"
+                >
+                  <i
+                    class="{{
+                      user.status
+                        ? 'fas fa-toggle-on text-green-500'
+                        : 'fas fa-toggle-off text-red-500'
+                    }}"
+                  ></i>
+                </button>
+                <button
+                  (click)="openEmailPopup(user._id, user.name, user.email)"
+                  class="text-orange-500 hover:text-orange-700 p-2 rounded-full bg-white border border-orange-500 transition-all duration-300 flex items-center focus:outline-none"
+                  title="Send Email"
+                >
+                  <i class="fas fa-envelope"></i>
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div *ngIf="users.length === 0" class="mt-4">No users found.</div>
+    </div>
+  </div>
+</div>
